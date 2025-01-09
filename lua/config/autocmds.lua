@@ -14,3 +14,11 @@ vim.api.nvim_create_autocmd("BufEnter", {
   command = "setlocal formatoptions-=c formatoptions-=r formatoptions-=o"
 })
 
+-- suppressing spelling in markdown
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "markdown", "txt" },
+  callback = function()
+    vim.opt_local.spell = false
+  end,
+})
+
