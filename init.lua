@@ -14,7 +14,6 @@ require("lint.linters.markdownlint").config = {
   },
 }
 
--- open pdf and imges with edge
 vim.api.nvim_create_autocmd("BufReadPost", {
   pattern = { "*.pdf", "*.png", "*.jpg", "*.jpeg", "*.gif" },
   callback = function()
@@ -27,10 +26,15 @@ vim.api.nvim_create_autocmd("BufReadPost", {
       or file_path:match("%.jpeg$")
       or file_path:match("%.gif$")
     then
-      os.execute(
-        'start "" "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe" ' .. vim.fn.shellescape(file_path)
-      )
-      vim.cmd("bdelete!")
+      -- Use vim.fn.jobstart to open the file in Edge without affecting buffers
+      vim.fn.jobstart({
+        "cmd.exe",
+        "/c",
+        "start",
+        '""',
+        '"C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe"',
+        vim.fn.shellescape(file_path),
+      }, { detach = true })
     end
   end,
 })
